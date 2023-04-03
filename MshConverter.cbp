@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MshConverter" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc8" />
+		<Build>
+			<Target title="MSH2FBX">
+				<Option output="bin\Tool\MSH2FBX" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/DLANG_ENG" />
+				</Compiler>
+			</Target>
+			<Target title="FBX2MSH">
+				<Option output="bin\Tool\FBX2MSH" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/DLANG_ENG" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32 CHS">
+				<Option output="bin\CHS\MshConverter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/DLANG_CHS" />
+				</Compiler>
+			</Target>
+			<Target title="Release Win32 ENG">
+				<Option output="bin\ENG\MshConverter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="msvc8" />
+				<Compiler>
+					<Add option="/DLANG_ENG" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="/MT" />
+			<Add option="/TP" />
+			<Add option="/Gd" />
+			<Add option="/GA" />
+			<Add option="/fp:fast" />
+			<Add option="/GF" />
+			<Add option="/Ox" />
+			<Add option="/D_CRT_SECURE_NO_DEPRECATE" />
+			<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+			<Add option="/DKFBX_DLLINFO" />
+		</Compiler>
+		<Linker>
+			<Add library="fbxsdk_20113_1" />
+			<Add library="Comctl32" />
+		</Linker>
+		<Unit filename="ANIIOPlugin\ANIIOPlugin.h" />
+		<Unit filename="ANIIOPlugin\ANIReader.h" />
+		<Unit filename="ANIIOPlugin\ANIWriter.h" />
+		<Unit filename="ANIIOPlugin\custom.h" />
+		<Unit filename="MSHIOPlugin\MSHIOPlugin.h" />
+		<Unit filename="MSHIOPlugin\MSHReader.h" />
+		<Unit filename="MSHIOPlugin\MSHWriter.h" />
+		<Unit filename="MSHIOPlugin\custom.h" />
+		<Unit filename="Resource\resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename=".\fbx2msh.cpp">
+			<Option target="FBX2MSH" />
+		</Unit>
+		<Unit filename="main.cpp">
+			<Option target="Release Win32 CHS" />
+			<Option target="Release Win32 ENG" />
+		</Unit>
+		<Unit filename=".\msh2fbx.cpp">
+			<Option target="MSH2FBX" />
+		</Unit>
+		<Unit filename="stdafx.h" />
+		<Unit filename="translate.h">
+			<Option target="Release Win32 CHS" />
+			<Option target="Release Win32 ENG" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

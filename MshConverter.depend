@@ -1,0 +1,169 @@
+# depslib dependency file v1.0
+1292144469 source:e:\backup\works\develop\projects\dragonnest\mshconverter\resource\resource.rc
+	"resource.h"
+	<windows.h>
+
+1292143705 e:\backup\works\develop\projects\dragonnest\mshconverter\resource\resource.h
+
+1292240855 source:e:\backup\works\develop\projects\dragonnest\mshconverter\main.cpp
+	"stdafx.h"
+
+1292210257 e:\backup\works\develop\projects\dragonnest\mshconverter\stdafx.h
+	<windows.h>
+	<commctrl.h>
+	<fbxsdk.h>
+	"Resource/resource.h"
+	"MSHIOPlugin/MSHIOPlugin.h"
+	"ANIIOPlugin/ANIIOPlugin.h"
+
+1291866946 e:\backup\works\develop\projects\dragonnest\mshconverter\mshioplugin\mshioplugin.h
+	"custom.h"
+	"MSHWriter.h"
+	"MSHReader.h"
+
+1292075096 e:\backup\works\develop\projects\dragonnest\mshconverter\mshioplugin\custom.h
+
+1292249118 e:\backup\works\develop\projects\dragonnest\mshconverter\mshioplugin\mshwriter.h
+
+1292252727 e:\backup\works\develop\projects\dragonnest\mshconverter\mshioplugin\mshreader.h
+
+1291904989 e:\backup\works\develop\projects\dragonnest\mshconverter\aniioplugin\aniioplugin.h
+	"Custom.h"
+	"ANIReader.h"
+	"ANIWriter.h"
+
+1291904505 e:\backup\works\develop\projects\dragonnest\mshconverter\aniioplugin\custom.h
+
+1292252635 e:\backup\works\develop\projects\dragonnest\mshconverter\aniioplugin\anireader.h
+
+1291905674 e:\backup\works\develop\projects\dragonnest\mshconverter\aniioplugin\aniwriter.h
+
+1295243707 source:f:\develop\projects\dragonnest\mshconverter\main.cpp
+	"stdafx.h"
+
+1295192611 f:\develop\projects\dragonnest\mshconverter\stdafx.h
+	<windows.h>
+	<commctrl.h>
+	<locale.h>
+	<fbxsdk.h>
+	"Resource/resource.h"
+	"MSHIOPlugin/MSHIOPlugin.h"
+	"ANIIOPlugin/ANIIOPlugin.h"
+
+1292143705 f:\develop\projects\dragonnest\mshconverter\resource\resource.h
+
+1292255656 f:\develop\projects\dragonnest\mshconverter\mshioplugin\mshioplugin.h
+	"custom.h"
+	"MSHWriter.h"
+	"MSHReader.h"
+
+1292075096 f:\develop\projects\dragonnest\mshconverter\mshioplugin\custom.h
+
+1295247711 f:\develop\projects\dragonnest\mshconverter\mshioplugin\mshwriter.h
+
+1295190799 f:\develop\projects\dragonnest\mshconverter\mshioplugin\mshreader.h
+
+1292255665 f:\develop\projects\dragonnest\mshconverter\aniioplugin\aniioplugin.h
+	"custom.h"
+	"ANIReader.h"
+	"ANIWriter.h"
+
+1291904505 f:\develop\projects\dragonnest\mshconverter\aniioplugin\custom.h
+
+1295203711 f:\develop\projects\dragonnest\mshconverter\aniioplugin\anireader.h
+
+1291905674 f:\develop\projects\dragonnest\mshconverter\aniioplugin\aniwriter.h
+
+1292144469 source:f:\develop\projects\dragonnest\mshconverter\resource\resource.rc
+	"resource.h"
+	<windows.h>
+
+1295243707 source:z:\develop\projects\dragonnest\mshconverter\main.cpp
+	"stdafx.h"
+
+1295192611 z:\develop\projects\dragonnest\mshconverter\stdafx.h
+	<windows.h>
+	<commctrl.h>
+	<locale.h>
+	<fbxsdk.h>
+	"Resource/resource.h"
+	"MSHIOPlugin/MSHIOPlugin.h"
+	"ANIIOPlugin/ANIIOPlugin.h"
+
+1292143705 z:\develop\projects\dragonnest\mshconverter\resource\resource.h
+
+1292255656 z:\develop\projects\dragonnest\mshconverter\mshioplugin\mshioplugin.h
+	"custom.h"
+	"MSHWriter.h"
+	"MSHReader.h"
+
+1292075096 z:\develop\projects\dragonnest\mshconverter\mshioplugin\custom.h
+
+1295253004 z:\develop\projects\dragonnest\mshconverter\mshioplugin\mshwriter.h
+
+1296394169 z:\develop\projects\dragonnest\mshconverter\mshioplugin\mshreader.h
+
+1292255665 z:\develop\projects\dragonnest\mshconverter\aniioplugin\aniioplugin.h
+	"custom.h"
+	"ANIReader.h"
+	"ANIWriter.h"
+
+1291904505 z:\develop\projects\dragonnest\mshconverter\aniioplugin\custom.h
+
+1295203711 z:\develop\projects\dragonnest\mshconverter\aniioplugin\anireader.h
+
+1291905674 z:\develop\projects\dragonnest\mshconverter\aniioplugin\aniwriter.h
+
+1292144469 source:z:\develop\projects\dragonnest\mshconverter\resource\resource.rc
+	"resource.h"
+	<windows.h>
+
+1301591374 source:e:\dev\projects\dragonnest\mshconverter\main.cpp
+	"stdafx.h"
+
+1301591320 e:\dev\projects\dragonnest\mshconverter\stdafx.h
+	<windows.h>
+	<commctrl.h>
+	<locale.h>
+	<fbxsdk.h>
+	"translate.h"
+	"Resource/resource.h"
+	"MSHIOPlugin/MSHIOPlugin.h"
+	"ANIIOPlugin/ANIIOPlugin.h"
+
+1301590708 e:\dev\projects\dragonnest\mshconverter\translate.h
+
+1292143705 e:\dev\projects\dragonnest\mshconverter\resource\resource.h
+
+1292255656 e:\dev\projects\dragonnest\mshconverter\mshioplugin\mshioplugin.h
+	"custom.h"
+	"MSHWriter.h"
+	"MSHReader.h"
+
+1292075096 e:\dev\projects\dragonnest\mshconverter\mshioplugin\custom.h
+
+1301590503 e:\dev\projects\dragonnest\mshconverter\mshioplugin\mshwriter.h
+	"translate.h"
+
+1315704658 e:\dev\projects\dragonnest\mshconverter\mshioplugin\mshreader.h
+
+1292255665 e:\dev\projects\dragonnest\mshconverter\aniioplugin\aniioplugin.h
+	"custom.h"
+	"ANIReader.h"
+	"ANIWriter.h"
+
+1291904505 e:\dev\projects\dragonnest\mshconverter\aniioplugin\custom.h
+
+1301590417 e:\dev\projects\dragonnest\mshconverter\aniioplugin\anireader.h
+	"translate.h"
+
+1291905674 e:\dev\projects\dragonnest\mshconverter\aniioplugin\aniwriter.h
+
+1301579149 source:e:\dev\projects\dragonnest\mshconverter\resource\resource.rc
+	"resource.h"
+	<windows.h>
+
+1314928908 source:e:\dev\projects\dragonnest\mshconverter\msh2fbx.cpp
+	"stdafx.h"
+	<stdio.h>
+
