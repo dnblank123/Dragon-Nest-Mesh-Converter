@@ -50,16 +50,16 @@
 #define OTHER_DATA_EDITBOX 1009
 
 //自定义函数声明
-const wchar_t* GetIOFilters(KFbxSdkManager*, int);
-void GetFileName(HWND, KFbxSdkManager*, wchar_t*,int &, int);
-bool ConvertFile(KFbxSdkManager* , wchar_t*, int, wchar_t*, int, wchar_t*, int);
-KFbxSdkManager* InitialFbxSdk();
+const wchar_t* GetIOFilters(FbxManager*, int);
+void GetFileName(HWND, FbxManager*, wchar_t*,int &, int);
+bool ConvertFile(FbxManager* , wchar_t*, int, wchar_t*, int, wchar_t*, int);
+FbxManager* InitialFbxSdk();
 
 
 //获取文件格式filter
-const wchar_t* GetIOFilters(KFbxSdkManager* pSdkManager, int ioSettings)
+const wchar_t* GetIOFilters(FbxManager* pSdkManager, int ioSettings)
 {
-    KString s;
+    FbxString s;
     int filterCount = 0;
     if(ioSettings == 0){ //获取Reader支援
         filterCount = pSdkManager->GetIOPluginRegistry()->GetReaderFormatCount();
@@ -102,7 +102,7 @@ const wchar_t* GetIOFilters(KFbxSdkManager* pSdkManager, int ioSettings)
 //1 - aniFile
 //2 - outputFile
 void GetFileName(HWND hwnd,
-                 KFbxSdkManager* pSdkManager,
+                 FbxManager* pSdkManager,
                  wchar_t* szFile,
                  int &formatNum,
                  int ioSettings)
@@ -147,7 +147,7 @@ void GetFileName(HWND hwnd,
     delete filter;
 }
 
-bool ConvertFile(KFbxSdkManager* pSdkManager,
+bool ConvertFile(FbxManager* pSdkManager,
                  wchar_t* inputFile, int inputFormat,
                  wchar_t* aniFile, int aniFormat,
                  wchar_t* outputFile, int outputFormat)
@@ -156,11 +156,11 @@ bool ConvertFile(KFbxSdkManager* pSdkManager,
     bool lResult = false;
     int lRegisteredCount;
     int lPluginId;
-    KFbxScene* lScene = KFbxScene::Create(pSdkManager,"");
+    FbxScene* lScene = FbxScene::Create(pSdkManager,"");
 
     //创建Importer/Exporter
-    KFbxImporter* lImporter = KFbxImporter::Create(pSdkManager,"");
-    KFbxExporter* lExporter = KFbxExporter::Create(pSdkManager, "");
+    FbxImporter* lImporter = FbxImporter::Create(pSdkManager,"");
+    FbxExporter* lExporter = FbxExporter::Create(pSdkManager, "");
 
     //导入文件
     if(inputFormat == 5)    //MSH (ANSI)
@@ -197,13 +197,13 @@ bool ConvertFile(KFbxSdkManager* pSdkManager,
     return lResult;
 }
 
-KFbxSdkManager* InitialFbxSdk()
+FbxManager* InitialFbxSdk()
 {
     //创建FBXSDK管理器
     int lRegisteredCount;
     int lPluginId;
-    KFbxSdkManager* lSdkManager = KFbxSdkManager::Create();
-    KFbxIOSettings* ios = KFbxIOSettings::Create(lSdkManager, IOSROOT);
+    FbxManager* lSdkManager = FbxManager::Create();
+    FbxIOSettings* ios = FbxIOSettings::Create(lSdkManager, IOSROOT);
     lSdkManager->SetIOSettings(ios);
     //注册组件
     lSdkManager->GetIOPluginRegistry()->RegisterReader(CreateMSHReader, GetMSHReaderInfo,

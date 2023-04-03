@@ -2,36 +2,38 @@
 MSH写入插件for FBX SDK
 */
 #include "translate.h"
-class MSHWriter : public KFbxWriter
+
+class MSHWriter : public FbxWriter
 {
 public:
 
-    MSHWriter(KFbxSdkManager &pFbxSdkManager, int pID);
+    MSHWriter(FbxManager &pFbxSdkManager, int pID);
     virtual ~MSHWriter();
     virtual bool FileCreate(char* pFileName);
     virtual bool FileClose();
     virtual bool IsFileOpen();
     virtual void GetWriteOptions();
-    virtual bool Write(KFbxDocument* pDocument);
-    virtual bool PreprocessScene(KFbxScene &pScene);
-    virtual bool PostprocessScene(KFbxScene &pScene);
+    virtual bool Write(FbxDocument* pDocument);
+    virtual bool PreprocessScene(FbxScene &pScene);
+    virtual bool PostprocessScene(FbxScene &pScene);
     //自定义函数声明
-    virtual void WriteHeader(KFbxScene*);
-    virtual void WriteBoneData(KFbxScene*, KFbxNode*);
-    virtual bool WriteMeshData(KFbxNode*);
+    virtual void WriteHeader(FbxScene*);
+    virtual void WriteBoneData(FbxScene*, FbxNode*);
+    virtual bool WriteMeshData(FbxNode*);
 
 private:
     FILE *mFilePointer;
-    KFbxSdkManager *mManager;
+    FbxManager *mManager;
 };
 
-MSHWriter::MSHWriter(KFbxSdkManager &pFbxSdkManager, int pID):
-KFbxWriter(pFbxSdkManager, pID),
-mFilePointer(NULL),
-mManager(&pFbxSdkManager)
+MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID):
+    FbxWriter(pFbxSdkManager, pID),
+    mFilePointer(NULL),
+    mManager(&pFbxSdkManager)
 {
 
 }
+
 
 MSHWriter::~MSHWriter()
 {
@@ -77,21 +79,21 @@ void MSHWriter::GetWriteOptions()
 }
 
 // Write file with stream options
-bool MSHWriter::Write(KFbxDocument* pDocument)
+bool MSHWriter::Write(FbxDocument* pDocument)
 {
     if (!pDocument){
         GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
         return false;
     }
 
-    KFbxScene* lScene = KFbxCast<KFbxScene>(pDocument);
+    FbxScene* lScene = FbxCast<FbxScene>(pDocument);
     bool lIsAScene = (lScene != NULL);
     bool lResult = true;
 
     if(lScene == NULL)
         return false;
 
-    KFbxNode* lRootNode = lScene->GetRootNode();
+    FbxNode* lRootNode = lScene->GetRootNode();
 
     //先填0x400字节,因为BoneData从0x400开始
     char empty[0x400] = {0};
@@ -118,37 +120,37 @@ bool MSHWriter::Write(KFbxDocument* pDocument)
 
 
 // Pre-process the scene before write it out
-bool MSHWriter::PreprocessScene(KFbxScene &pScene)
+bool MSHWriter::PreprocessScene(FbxScene &pScene)
 {
     return true;
 }
 
 // Post-process the scene after write it out
-bool MSHWriter::PostprocessScene(KFbxScene &pScene)
+bool MSHWriter::PostprocessScene(FbxScene &pScene)
 {
     return true;
 }
 
 
-void MSHWriter::WriteHeader(KFbxScene* pScene)
+void MSHWriter::WriteHeader(FbxScene* pScene)
 {
     size_t lSize = 0x130;   //sizeof(MshHeader);
     MshHeader lHeader;
     char* lBuffer = (char*)&lHeader;
 
     //计算BoundingBox
-    KFbxNode* pRootNode = pScene->GetRootNode();
-    KFbxGeometry* pMeshAttribute;
-    KFbxVector4 bbMax,bbMin;
+    FbxNode* pRootNode = pScene->GetRootNode();
+    FbxGeometry* pMeshAttribute;
+    FbxVector4 bbMax,bbMin;
     for(int i = 0; i < 3; i++)
         for(int j = 0; j < pRootNode->GetChildCount(); j++)
             if(pRootNode->GetChild(j)->GetMesh()){
-                pMeshAttribute = (KFbxGeometry*)pRootNode->GetChild(j)->GetNodeAttribute();
+                pMeshAttribute = (FbxGeometry*)pRootNode->GetChild(j)->GetNodeAttribute();
                 pMeshAttribute->ComputeBBox();
-                if(bbMax.GetAt(i) < pMeshAttribute->BBoxMax.Get()[i])
-                    bbMax.SetAt(i, pMeshAttribute->BBoxMax.Get()[i]);
-                if(bbMin.GetAt(i) > pMeshAttribute->BBoxMin.Get()[i])
-                    bbMin.SetAt(i, pMeshAttribute->BBoxMin.Get()[i]);
+                if (bbMax[i] < pMeshAttribute->BBoxMax.Get()[i])
+                    bbMax[i], pMeshAttribute->BBoxMax.Get()[i];
+                if (bbMin[i] > pMeshAttribute->BBoxMin.Get()[i])
+                    bbMin[i], pMeshAttribute->BBoxMin.Get()[i];
             }
 
     //编辑文件头
@@ -167,12 +169,12 @@ void MSHWriter::WriteHeader(KFbxScene* pScene)
     fwrite(lBuffer, lSize, 1, mFilePointer);
 }
 //递归读取骨骼信息并写入信息
-void MSHWriter::WriteBoneData(KFbxScene* pScene, KFbxNode* pSkeletonNode)
+void MSHWriter::WriteBoneData(FbxScene* pScene, FbxNode* pSkeletonNode)
 {
     BoneData lBoneData;
     char* lBuffer = (char*)&lBoneData;
     size_t lSize = 0x140;   //sizeof(BoneData);
-    KFbxXMatrix transformMatrix;
+    FbxMatrix transformMatrix;
     //获取当前骨骼名称
     memset(lBoneData.boneName, 0, 256);  //字符数组先清零
     strcpy(lBoneData.boneName, pSkeletonNode->GetName());
@@ -185,7 +187,7 @@ void MSHWriter::WriteBoneData(KFbxScene* pScene, KFbxNode* pSkeletonNode)
                 lBoneData.boneName[i] = ' ';
     pSkeletonNode->SetName(lBoneData.boneName); //写回到节点,后面的绑定索引需要用到
     //获取当期骨骼世界变换矩阵
-    transformMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(pSkeletonNode);
+    transformMatrix = pScene->GetAnimationEvaluator()->GetNodeGlobalTransform(pSkeletonNode);
     transformMatrix = transformMatrix.Inverse();
     for(int i = 0; i < 4; i++)
         lBoneData.transformMatrix[i] = transformMatrix.GetRow(i);
@@ -197,9 +199,9 @@ void MSHWriter::WriteBoneData(KFbxScene* pScene, KFbxNode* pSkeletonNode)
     }
 }
 
-bool MSHWriter::WriteMeshData(KFbxNode* pMeshNode)
+bool MSHWriter::WriteMeshData(FbxNode* pMeshNode)
 {
-    KFbxMesh* pMesh = pMeshNode->GetMesh();
+    FbxMesh* pMesh = pMeshNode->GetMesh();
     if(pMesh){
         /*错误提示*/
         if(!pMesh->IsTriangleMesh()){
@@ -227,15 +229,15 @@ bool MSHWriter::WriteMeshData(KFbxNode* pMeshNode)
         //获取Mesh数据
         int boneCount;                  //骨骼数,要作为单个数据写入到Mesh数据尾部
         int* originFaceIndex;           //顶点索引
-        KFbxVector4* originVertexData;  //顶点数据
-        KFbxLayerElementArrayTemplate<KFbxVector4>* originNormalData;  //法线数据
-        KFbxLayerElementArrayTemplate<KFbxVector2>* originUVData;     //UV数据
-        KFbxLayerElementArrayTemplate<int>* originUVIndex;
-        KFbxGeometry* pMeshAttribute;
-        KFbxSkin* pSkin;                //蒙皮,权重数据
+        FbxVector4* originVertexData;  //顶点数据
+        FbxLayerElementArrayTemplate<FbxVector4>* originNormalData;  //法线数据
+        FbxLayerElementArrayTemplate<FbxVector2>* originUVData;     //UV数据
+        FbxLayerElementArrayTemplate<int>* originUVIndex;
+        FbxGeometry* pMeshAttribute;
+        FbxSkin* pSkin;                //蒙皮,权重数据
         originFaceIndex = pMesh->GetPolygonVertices();
         originVertexData = pMesh->GetControlPoints();
-        pMesh->ComputeVertexNormals();  //需要先合并一下法线
+        pMesh->GenerateNormals();  //需要先合并一下法线
         for(int i = 0; i < pMesh->GetLayerCount(); i++){    //获取法线,UV数组
             if(pMesh->GetLayer(i)->GetNormals())
                 originNormalData = &pMesh->GetLayer(i)->GetNormals()->GetDirectArray();
@@ -244,8 +246,8 @@ bool MSHWriter::WriteMeshData(KFbxNode* pMeshNode)
                 originUVIndex = &pMesh->GetLayer(i)->GetUVs()->GetIndexArray();
             }
         }
-        pMeshAttribute = (KFbxGeometry*)pMeshNode->GetNodeAttribute();
-        pSkin = (KFbxSkin*)pMeshAttribute->GetDeformer(0, KFbxDeformer::eSKIN);
+        pMeshAttribute = (FbxGeometry*)pMeshNode->GetNodeAttribute();
+        pSkin = (FbxSkin*)pMeshAttribute->GetDeformer(0, FbxDeformer::eSkin);
         boneCount = pSkin->GetClusterCount();
 
         //确定数据块(缓冲)大小

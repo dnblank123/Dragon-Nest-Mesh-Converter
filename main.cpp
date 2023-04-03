@@ -12,11 +12,19 @@
 *许可:NONE
 ***********************************************************/
 #include "stdafx.h"
+#include "translate.h"
+
+//#define APP_NAME _T("Dragon Nest Mesh Converter")
+//#define APP_VERSION _T("1.0.0") 
+//#define LANG_BROWSE _T("Browse")
+//#define LANG_CONVERT _T("Convert")
+//#define LANG_CHOOSE_MODEL _T("Choose Model")
+//#define LANG_CHOOSE_ANI _T("Choose ANI")
 
 LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
-    static TCHAR szAppName[] = APP_NAME APP_VERSION;
+    static WCHAR szAppName[] = APP_NAME APP_VERSION;
     HWND hwnd ;
     MSG msg ;
     WNDCLASS wndclass ;
@@ -78,7 +86,7 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                outputFormat = -1;
 
     //初始化FBXSDK管理器
-    static KFbxSdkManager* lSdkManager;
+    static FbxManager* lSdkManager;
 
     switch (message){
         case WM_CREATE:
