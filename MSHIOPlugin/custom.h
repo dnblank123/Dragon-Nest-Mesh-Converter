@@ -1,23 +1,29 @@
 ﻿/*--------------------MSH自定义类型定义--------------------*/
-class Vec2F{
+class Vec2F {
     public:
     float x;
     float y;
-    Vec2F(){x = 0; y = 0;}
-    Vec2F(FbxVector2 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
-    Vec2F(FbxVector4 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
+
+    Vec2F() : x(0.0f), y(0.0f) {}
+
+    Vec2F(FbxVector2& vector) : x(vector.mData[0]), y(vector.mData[1]) {}
+
+    float GetX() const { return x; }
+    float GetY() const { return y; }
 };
+
 class Vec3F : public Vec2F{
     public:
     float z;
     Vec3F() : Vec2F(){z = 0;}
-    Vec3F(FbxVector4 &vector) : Vec2F(vector){z = vector.GetAt(2);}
+    Vec3F(FbxVector4 &vector) : Vec2F(){z = vector.mData[2];}
 };
+
 class Vec4F : public Vec3F{
     public:
     float w;
     Vec4F() : Vec3F(){w = 0;}
-    Vec4F(FbxVector4 &vector) : Vec3F(vector){w = vector.GetAt(3);}
+    Vec4F(FbxVector4 &vector) : Vec3F(vector){w = vector.mData[3];}
 };
 
 
