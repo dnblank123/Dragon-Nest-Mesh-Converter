@@ -1,34 +1,35 @@
 ﻿/*
 MSH读取插件for FBX SDK
 */
-class MSHReader : public KFbxReader
+
+class MSHReader : public FbxReader
 {
 public:
-    MSHReader(KFbxSdkManager &pFbxSdkManager, int pID);
+    MSHReader(FbxManager &pFbxSdkManager, int pID);
     virtual ~MSHReader();
     virtual void GetVersion(int& pMajor, int& pMinor, int& pRevision) const;
     virtual bool FileOpen(char* pFileName);
     virtual bool FileClose();
     virtual bool IsFileOpen();
     virtual bool GetReadOptions(bool pParseFileAsNeeded = true);
-    virtual bool Read(KFbxDocument* pDocument);
+    virtual bool Read(FbxDocument* pDocument);
 
     //自定义函数声明
     virtual char* MSHReader::InitialPointer(char*, char*&, MshHeader*&);
     virtual char* MSHReader::InitialMeshPointer(char*, MeshInfo*&, MeshDataPointer*);
-    virtual KFbxNode* MSHReader::CreateMesh(KFbxScene*, MeshInfo*, MeshDataPointer*);
-    virtual void MSHReader::CreateSkeleton(KFbxScene*, MshHeader*, BoneData*);
-    virtual KFbxCluster** MSHReader::LinkSkeleton(KFbxNode*, KFbxNode*, MeshDataPointer*);
-    virtual void MSHReader::AddWeight(KFbxCluster**, MeshInfo*, MeshDataPointer*);
-    virtual void MSHReader::StoreBindPose(KFbxScene*, KFbxNode*, KFbxCluster**, MeshDataPointer*);
+    virtual FbxNode* MSHReader::CreateMesh(FbxScene*, MeshInfo*, MeshDataPointer*);
+    virtual void MSHReader::CreateSkeleton(FbxScene*, MshHeader*, BoneData*);
+    virtual FbxCluster** MSHReader::LinkSkeleton(FbxNode*, FbxNode*, MeshDataPointer*);
+    virtual void MSHReader::AddWeight(FbxCluster**, MeshInfo*, MeshDataPointer*);
+    virtual void MSHReader::StoreBindPose(FbxScene*, FbxNode*, FbxCluster**, MeshDataPointer*);
 private:
     FILE *mFilePointer;
-    KFbxSdkManager *mManager;
+    FbxManager *mManager;
 };
 
 /*--------------------MSH插件类定义--------------------*/
-MSHReader::MSHReader(KFbxSdkManager &pFbxSdkManager, int pID):
-KFbxReader(pFbxSdkManager, pID),
+MSHReader::MSHReader(FbxManager &pFbxSdkManager, int pID):
+FbxReader(pFbxSdkManager, pID),
 mFilePointer(NULL),
 mManager(&pFbxSdkManager)
 {
@@ -76,22 +77,22 @@ bool MSHReader::GetReadOptions(bool pParseFileAsNeeded)
 }
 
 /*--------------------读取MSH信息--------------------*/
-bool MSHReader::Read(KFbxDocument* pDocument)
+bool MSHReader::Read(FbxDocument* pDocument)
 {
     if (!pDocument){
         GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
         return false;
     }
     //创建根场景
-    KFbxScene*      lScene = KFbxCast<KFbxScene>(pDocument);
+    FbxScene*      lScene = FbxCast<FbxScene>(pDocument);
     bool            lResult = false;
 
     if(lScene == NULL)
         return false;
 
     //初始化根结点
-    KFbxNode* lRootNode = lScene->GetRootNode();
-    KFbxNodeAttribute * lRootNodeAttribute = KFbxNull::Create(lScene,"Scene Root");
+    FbxNode* lRootNode = lScene->GetRootNode();
+    FbxNodeAttribute * lRootNodeAttribute = FbxNull::Create(lScene,"Scene Root");
     lRootNode->SetNodeAttribute(lRootNodeAttribute);
 
     if(mFilePointer == NULL)
@@ -127,11 +128,11 @@ bool MSHReader::Read(KFbxDocument* pDocument)
             pReader = InitialMeshPointer(pReader, pMeshInfo, &meshData);
 
             //读取并创建Mesh
-            KFbxNode* pMesh = CreateMesh(lScene, pMeshInfo, &meshData);
+            FbxNode* pMesh = CreateMesh(lScene, pMeshInfo, &meshData);
             lRootNode->AddChild(pMesh);
 
             //连接骨骼到Mesh
-            KFbxCluster** pClusterIndex = LinkSkeleton(lRootNode, pMesh, &meshData);
+            FbxCluster** pClusterIndex = LinkSkeleton(lRootNode, pMesh, &meshData);
             //添加骨骼权重
             AddWeight(pClusterIndex, pMeshInfo, &meshData);
             //添加BindPose
@@ -192,53 +193,53 @@ char* MSHReader::InitialMeshPointer(char* pReader,
     return pReader;
 }
 
-KFbxNode* MSHReader::CreateMesh(KFbxScene* pScene,
+FbxNode* MSHReader::CreateMesh(FbxScene* pScene,
                                 MeshInfo* pMeshInfo,
                                 MeshDataPointer* pMeshData)
 {
     //创建mesh结点
-    KFbxMesh* lMesh = KFbxMesh::Create(pScene, pMeshInfo->meshName);
+    FbxMesh* lMesh = FbxMesh::Create(pScene, pMeshInfo->meshName);
     //把mesh结点加入到场景
-    KFbxNode* lNode = KFbxNode::Create(pScene, pMeshInfo->meshName);
+    FbxNode* lNode = FbxNode::Create(pScene, pMeshInfo->meshName);
     lNode->SetNodeAttribute(lMesh);
-    lNode->SetShadingMode(KFbxNode::eTEXTURE_SHADING);
+    lNode->SetShadingMode(FbxNode::eTEXTURE_SHADING);
     //创建Layer Container
     lMesh->CreateLayer();
-    KFbxLayer* layer = lMesh->GetLayer(0);
+    FbxLayer* layer = lMesh->GetLayer(0);
     //连接法线层
-    K_ASSERT(layer != NULL);
-    KFbxLayerElementNormal* normLayer;
-    normLayer = KFbxLayerElementNormal::Create((KFbxLayerContainer*)lMesh, "");
-    normLayer->SetMappingMode(KFbxLayerElement::eBY_POLYGON_VERTEX);
-    normLayer->SetReferenceMode(KFbxLayerElement::eINDEX_TO_DIRECT);
+    FBX_ASSERT(layer != NULL);
+    FbxLayerElementNormal* normLayer;
+    normLayer = FbxLayerElementNormal::Create((FbxLayerContainer*)lMesh, "");
+    normLayer->SetMappingMode(FbxLayerElement::eBY_POLYGON_VERTEX);
+    normLayer->SetReferenceMode(FbxLayerElement::eINDEX_TO_DIRECT);
     layer->SetNormals(normLayer);
     //连接UV层
-    KFbxLayerElementUV* uvLayer;
-    uvLayer = KFbxLayerElementUV::Create((KFbxLayerContainer*)lMesh, "map1");
-    uvLayer->SetMappingMode(KFbxLayerElement::eBY_POLYGON_VERTEX);
-    uvLayer->SetReferenceMode(KFbxLayerElement::eINDEX_TO_DIRECT);
+    FbxLayerElementUV* uvLayer;
+    uvLayer = FbxLayerElementUV::Create((FbxLayerContainer*)lMesh, "map1");
+    uvLayer->SetMappingMode(FbxLayerElement::eBY_POLYGON_VERTEX);
+    uvLayer->SetReferenceMode(FbxLayerElement::eINDEX_TO_DIRECT);
     layer->SetUVs(uvLayer);
 
     //读取顶点信息
     Vec3F* tVertex = (Vec3F*)pMeshData->pVertexData;   //顶点指针,xyz三个float
     lMesh->InitControlPoints(pMeshInfo->vertexCount);
-    KFbxVector4* lControlPoints = lMesh->GetControlPoints();
+    FbxVector4* lControlPoints = lMesh->GetControlPoints();
     for(int i = 0; i < pMeshInfo->vertexCount; i++){
-        lControlPoints[i] = KFbxVector4(tVertex->x, tVertex->y, tVertex->z);
+        lControlPoints[i] = FbxVector4(tVertex->x, tVertex->y, tVertex->z);
         tVertex++;
     }
 
     //读取法线信息
     Vec3F* tNormal = (Vec3F*)pMeshData->pNormalData;
     for(int i = 0; i < pMeshInfo->vertexCount; i++){
-        normLayer->GetDirectArray().Add(KFbxVector4(tNormal->x, tNormal->y, tNormal->z));
+        normLayer->GetDirectArray().Add(FbxVector4(tNormal->x, tNormal->y, tNormal->z));
         tNormal++;
     }
 
     //读取UV信息
     Vec2F* pUV = (Vec2F*)pMeshData->pUVData;
     for(int i = 0; i < pMeshInfo->vertexCount; i++){
-        uvLayer->GetDirectArray().Add(KFbxVector2(pUV->x, 1 - pUV->y)); //垂直翻转
+        uvLayer->GetDirectArray().Add(FbxVector2(pUV->x, 1 - pUV->y)); //垂直翻转
         pUV++;
     }
 
@@ -293,15 +294,15 @@ KFbxNode* MSHReader::CreateMesh(KFbxScene* pScene,
 }
 
 //创建骨骼
-void MSHReader::CreateSkeleton(KFbxScene* pScene,
+void MSHReader::CreateSkeleton(FbxScene* pScene,
                                MshHeader* pHeader,
                                BoneData* pBoneData)
 {
     for(int i = 0; i < pHeader->boneCount; i++){
-        KFbxSkeleton* lSkeleton = KFbxSkeleton::Create(pScene, "");
-        lSkeleton->SetSkeletonType(KFbxSkeleton::eLIMB_NODE);
+        FbxSkeleton* lSkeleton = FbxSkeleton::Create(pScene, "");
+        lSkeleton->SetSkeletonType(FbxSkeleton::eLIMB_NODE);
         lSkeleton->Size.Set(50.0);
-        KFbxNode* lNode = KFbxNode::Create(pScene, pBoneData->boneName);
+        FbxNode* lNode = FbxNode::Create(pScene, pBoneData->boneName);
         lNode->SetNodeAttribute(lSkeleton);
 
         //添加变换矩阵到骨骼
@@ -313,7 +314,7 @@ void MSHReader::CreateSkeleton(KFbxScene* pScene,
             tMatrix[i][2] = pBoneData->transformMatrix[i].z;
             tMatrix[i][3] = pBoneData->transformMatrix[i].w;
         }
-        KFbxXMatrix pMatrix = *(KFbxXMatrix*)&tMatrix;
+        FbxMatrix pMatrix = *(FbxMatrix*)&tMatrix;
         pMatrix = pMatrix.Inverse();
 
         //定位骨骼位置
@@ -321,9 +322,9 @@ void MSHReader::CreateSkeleton(KFbxScene* pScene,
         lNode->LclRotation.Set(pMatrix.GetR());
         lNode->LclScaling.Set(pMatrix.GetS());
         //设定骨骼变换矩阵信息
-        lNode->SetGeometricTranslation(KFbxNode::eSOURCE_SET, pMatrix.GetT());
-        lNode->SetGeometricRotation(KFbxNode::eSOURCE_SET, pMatrix.GetR());
-        lNode->SetGeometricScaling(KFbxNode::eSOURCE_SET, pMatrix.GetS());
+        lNode->SetGeometricTranslation(FbxNode::eSOURCE_SET, pMatrix.GetT());
+        lNode->SetGeometricRotation(FbxNode::eSOURCE_SET, pMatrix.GetR());
+        lNode->SetGeometricScaling(FbxNode::eSOURCE_SET, pMatrix.GetS());
 
         //添加到场景根节点
         pScene->GetRootNode()->AddChild(lNode);
@@ -334,28 +335,28 @@ void MSHReader::CreateSkeleton(KFbxScene* pScene,
 }
 
 //连接相应骨骼到Mesh,返回值是一个存放约束器指针的数组
-KFbxCluster** MSHReader::LinkSkeleton(KFbxNode* pScene,
-                                      KFbxNode* pMesh,
+FbxCluster** MSHReader::LinkSkeleton(FbxNode* pScene,
+                                      FbxNode* pMesh,
                                       MeshDataPointer* pMeshData)
 {
     int meshBoneCount = *pMeshData->pBoneCount;
     char* pBoneName = pMeshData->pBoneName;
-    KFbxGeometry* lMeshAttribute = (KFbxGeometry*)pMesh->GetNodeAttribute();
-    KFbxSkin* lSkin = KFbxSkin::Create(pScene, "");
+    FbxGeometry* lMeshAttribute = (FbxGeometry*)pMesh->GetNodeAttribute();
+    FbxSkin* lSkin = FbxSkin::Create(pScene, "");
     //创建骨骼名称对应第n索引,pCluster是指向约束器指针的指针
-    KFbxCluster** pCluster = (KFbxCluster**)malloc(sizeof(KFbxCluster*) * meshBoneCount);
+    FbxCluster** pCluster = (FbxCluster**)malloc(sizeof(FbxCluster*) * meshBoneCount);
 
     //连接骨骼节点与约束器,追加蒙皮
     for(int i = 0; i < meshBoneCount; i++){
-        pCluster[i] = KFbxCluster::Create(pScene,"");
+        pCluster[i] = FbxCluster::Create(pScene,"");
         pCluster[i]->SetLink(pScene->FindChild(pBoneName));
-        pCluster[i]->SetLinkMode(KFbxCluster::eTOTAL1);
+        pCluster[i]->SetLinkMode(FbxCluster::eTOTAL1);
 
         //为约束器设定世界变换矩阵
-        KFbxNode* pChildNode = pScene->FindChild(pBoneName);
-        KFbxXMatrix childMatrix(pChildNode->GetGeometricTranslation(KFbxNode::eSOURCE_SET),
-                                pChildNode->GetGeometricRotation(KFbxNode::eSOURCE_SET),
-                                pChildNode->GetGeometricScaling(KFbxNode::eSOURCE_SET));
+        FbxNode* pChildNode = pScene->FindChild(pBoneName);
+        FbxMatrix childMatrix(pChildNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
+                                pChildNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
+                                pChildNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
         pCluster[i]->SetTransformLinkMatrix(childMatrix);
 
         //添加约束器到蒙皮
@@ -368,7 +369,7 @@ KFbxCluster** MSHReader::LinkSkeleton(KFbxNode* pScene,
 }
 
 //添加权重
-void MSHReader::AddWeight(KFbxCluster** pClusterIndex,
+void MSHReader::AddWeight(FbxCluster** pClusterIndex,
                           MeshInfo* pMeshInfo,
                           MeshDataPointer* pMeshData)
 {
@@ -383,21 +384,21 @@ void MSHReader::AddWeight(KFbxCluster** pClusterIndex,
 }
 
 //保存当前Pose
-void MSHReader::StoreBindPose(KFbxScene* pScene,
-                              KFbxNode* pMesh,
-                              KFbxCluster** pClusterIndex,
+void MSHReader::StoreBindPose(FbxScene* pScene,
+                              FbxNode* pMesh,
+                              FbxCluster** pClusterIndex,
                               MeshDataPointer* pMeshData)
 {
-    KFbxPose* lPose = KFbxPose::Create(pScene,pMesh->GetName());
+    FbxPose* lPose = FbxPose::Create(pScene,pMesh->GetName());
     lPose->SetIsBindPose(true);
 
-    KFbxMatrix lBindMeshMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(pMesh);
+    FbxMatrix lBindMeshMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(pMesh);
     lPose->Add(pMesh, lBindMeshMatrix);
     for(int i=0; i < *pMeshData->pBoneCount; i++){
-        KFbxNode* lKFbxNode = pClusterIndex[i]->GetLink();
-        KFbxMatrix lBindMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(lKFbxNode);
+        FbxNode* lFbxNode = pClusterIndex[i]->GetLink();
+        FbxMatrix lBindMatrix = pScene->GetEvaluator()->GetNodeGlobalTransform(lFbxNode);
         lBindMatrix = lBindMatrix.Inverse();
-        lPose->Add(lKFbxNode, lBindMatrix);
+        lPose->Add(lFbxNode, lBindMatrix);
     }
     pScene->AddPose(lPose);
 }

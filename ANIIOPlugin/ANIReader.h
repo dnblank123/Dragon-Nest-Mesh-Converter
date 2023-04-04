@@ -2,29 +2,29 @@
 ANI读取插件for FBX SDK
 */
 #include "translate.h"
-class ANIReader : public KFbxReader
+class ANIReader : public FbxReader
 {
 public:
-    ANIReader(KFbxSdkManager &pFbxSdkManager, int pID);
+    ANIReader(FbxManager &pFbxSdkManager, int pID);
     virtual ~ANIReader();
     virtual void GetVersion(int& pMajor, int& pMinor, int& pRevision) const;
     virtual bool FileOpen(char* pFileName);
     virtual bool FileClose();
     virtual bool IsFileOpen();
     virtual bool GetReadOptions(bool pParseFileAsNeeded = true);
-    virtual bool Read(KFbxDocument* pDocument);
+    virtual bool Read(FbxDocument* pDocument);
 
     //自定义函数声明
     virtual bool InitialPointers(char*, char*&, char*&, AniHeader*&);
-    virtual bool AddBoneInfo(KFbxNode*, char*, AniHeader*);
+    virtual bool AddBoneInfo(FbxNode*, char*, AniHeader*);
 private:
     FILE *mFilePointer;
-    KFbxSdkManager *mManager;
+    FbxManager *mManager;
 };
 
 /*--------------------ANI插件类定义--------------------*/
-ANIReader::ANIReader(KFbxSdkManager &pFbxSdkManager, int pID):
-KFbxReader(pFbxSdkManager, pID),
+ANIReader::ANIReader(FbxManager &pFbxSdkManager, int pID):
+FbxReader(pFbxSdkManager, pID),
 mFilePointer(NULL),
 mManager(&pFbxSdkManager)
 {
@@ -72,21 +72,21 @@ bool ANIReader::GetReadOptions(bool pParseFileAsNeeded)
 }
 
 /*--------------------读取ANI信息--------------------*/
-bool ANIReader::Read(KFbxDocument* pDocument)
+bool ANIReader::Read(FbxDocument* pDocument)
 {
     if (!pDocument){
         GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
         return false;
     }
     //创建根场景
-    KFbxScene*      lScene = KFbxCast<KFbxScene>(pDocument);
+    FbxScene*      lScene = FbxCast<FbxScene>(pDocument);
     bool            lResult = false;
 
     if(lScene == NULL)
         return false;
 
     //初始化根结点
-    KFbxNode* lRootNode = lScene->GetRootNode();
+    FbxNode* lRootNode = lScene->GetRootNode();
 
     if(mFilePointer == NULL)
         return true;
@@ -139,14 +139,14 @@ bool ANIReader::InitialPointers(char* pReader,
     return true;
 }
 
-bool ANIReader::AddBoneInfo(KFbxNode* pRootNode,
+bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
                  char* pReader,    //动画数据开始处
                  AniHeader* pHeader)
 {
     BoneInfo* pBoneInfo;
-    KFbxNode *pParentNode, *pChildNode;
+    FbxNode *pParentNode, *pChildNode;
     int *transformationCount, *rotationCount, *scalingCount;
-    KFbxXMatrix parentMatrix, childMatrix;
+    FbxMatrix parentMatrix, childMatrix;
     //为每个骨骼结点添加父子信息
     for(int i = 0; i < pHeader->boneCount; i++){
         pBoneInfo = (BoneInfo*)pReader;
@@ -155,10 +155,10 @@ bool ANIReader::AddBoneInfo(KFbxNode* pRootNode,
         //插入骨骼节点关系信息
         if(pChildNode){ //判断ANI文件正确性
             if(pParentNode == NULL){
-                pChildNode->GetSkeleton()->SetSkeletonType(KFbxSkeleton::eROOT);    //根节点时设为root骨骼节点
-                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(KFbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricRotation(KFbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricScaling(KFbxNode::eSOURCE_SET));
+                pChildNode->GetSkeleton()->SetSkeletonType(FbxSkeleton::eROOT);    //根节点时设为root骨骼节点
+                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
+                                   pChildNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
+                                   pChildNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
                 pChildNode->LclTranslation.Set(childMatrix.GetT());
                 pChildNode->LclRotation.Set(childMatrix.GetR());
                 pChildNode->LclScaling.Set(childMatrix.GetS());
@@ -167,12 +167,12 @@ bool ANIReader::AddBoneInfo(KFbxNode* pRootNode,
                 pRootNode->RemoveChild(pChildNode);    //添加节点前先从根场景删除骨骼节点
                 pParentNode->AddChild(pChildNode);
                 //世界坐标到本地坐标的变换
-                parentMatrix.SetTRS(pParentNode->GetGeometricTranslation(KFbxNode::eSOURCE_SET),
-                                    pParentNode->GetGeometricRotation(KFbxNode::eSOURCE_SET),
-                                    pParentNode->GetGeometricScaling(KFbxNode::eSOURCE_SET));
-                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(KFbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricRotation(KFbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricScaling(KFbxNode::eSOURCE_SET));
+                parentMatrix.SetTRS(pParentNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
+                                    pParentNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
+                                    pParentNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
+                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
+                                   pChildNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
+                                   pChildNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
                 childMatrix = parentMatrix.Inverse() * childMatrix;
                 pChildNode->LclTranslation.Set(childMatrix.GetT());
                 pChildNode->LclRotation.Set(childMatrix.GetR());

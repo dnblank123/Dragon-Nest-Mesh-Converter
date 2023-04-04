@@ -2,23 +2,23 @@
 #include "ANIReader.h"
 #include "ANIWriter.h"
 
-KFbxWriter* CreateANIWriter(KFbxSdkManager& pManager, KFbxExporter& pExporter, int pSubID, int pPluginID);
-void* GetANIWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId);
-void FillANIWriterIOSettings(KFbxIOSettings& pIOS);
+FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID);
+void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId);
+void FillANIWriterIOSettings(FbxIOSettings& pIOS);
 
-KFbxReader* CreateANIReader(KFbxSdkManager& pManager, KFbxImporter& pImporter, int pSubID, int pPluginID);
-void *GetANIReaderInfo(KFbxReader::KInfoRequest pRequest, int pId);
-void FillANIReaderIOSettings(KFbxIOSettings& pIOS);
+FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID);
+void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId);
+void FillANIReaderIOSettings(FbxIOSettings& pIOS);
 
 // Create your own writer.
 // And your writer will get a pPluginID and pSubID.
-KFbxWriter* CreateANIWriter(KFbxSdkManager& pManager, KFbxExporter& pExporter, int pSubID, int pPluginID)
+FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
 {
     return FbxSdkNew<ANIWriter>(pManager, pPluginID);
 }
 
 // Get extension, description or version info about ANIWriter
-void* GetANIWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId)
+void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId)
 {
     static char const* sExt[] =
     {
@@ -34,44 +34,44 @@ void* GetANIWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId)
 
     switch (pRequest)
     {
-    case KFbxWriter::eInfoExtension:
+    case FbxWriter::eInfoExtension:
         return sExt;
-    case KFbxWriter::eInfoDescriptions:
+    case FbxWriter::eInfoDescriptions:
         return sDesc;
-    case KFbxWriter::eInfoVersions:
+    case FbxWriter::eInfoVersions:
         return 0;
     default:
         return 0;
     }
 }
 
-void FillANIWriterIOSettings(KFbxIOSettings& pIOS)
+void FillANIWriterIOSettings(FbxIOSettings& pIOS)
 {
-    // Here you can write your own KFbxIOSettings and parse them.
+    // Here you can write your own FbxIOSettings and parse them.
 }
 
 // Creates a ANIReader in the Sdk Manager
-KFbxReader* CreateANIReader(KFbxSdkManager& pManager, KFbxImporter& pImporter, int pSubID, int pPluginID)
+FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
 {
     return FbxSdkNew<ANIReader>(pManager, pPluginID);
 }
 
 // Get extension, description or version info about ANIReader
-void *GetANIReaderInfo(KFbxReader::KInfoRequest pRequest, int pId)
+void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId)
 {
     switch (pRequest)
     {
-    case KFbxReader::eInfoExtension:
-        return GetANIWriterInfo(KFbxWriter::eInfoExtension, pId);
-    case KFbxReader::eInfoDescriptions:
-        return GetANIWriterInfo(KFbxWriter::eInfoDescriptions, pId);
+    case FbxReader::eInfoExtension:
+        return GetANIWriterInfo(FbxWriter::eInfoExtension, pId);
+    case FbxReader::eInfoDescriptions:
+        return GetANIWriterInfo(FbxWriter::eInfoDescriptions, pId);
     default:
         return 0;
     }
 }
 
-void FillANIReaderIOSettings(KFbxIOSettings& pIOS)
+void FillANIReaderIOSettings(FbxIOSettings& pIOS)
 {
-    // Here you can write your own KFbxIOSettings and parse them.
+    // Here you can write your own FbxIOSettings and parse them.
 }
 

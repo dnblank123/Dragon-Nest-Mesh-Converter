@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
     }
 
     //initial fbx
-    KFbxSdkManager* lSdkManager;
+    FbxManager* lSdkManager;
     lSdkManager = InitialFbxSdk();
 
     //paths

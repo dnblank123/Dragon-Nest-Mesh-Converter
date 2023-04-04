@@ -4,20 +4,20 @@ class Vec2F{
     float x;
     float y;
     Vec2F(){x = 0; y = 0;}
-    Vec2F(KFbxVector2 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
-    Vec2F(KFbxVector4 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
+    Vec2F(FbxVector2 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
+    Vec2F(FbxVector4 &vector){x = vector.GetAt(0); y = vector.GetAt(1);}
 };
 class Vec3F : public Vec2F{
     public:
     float z;
     Vec3F() : Vec2F(){z = 0;}
-    Vec3F(KFbxVector4 &vector) : Vec2F(vector){z = vector.GetAt(2);}
+    Vec3F(FbxVector4 &vector) : Vec2F(vector){z = vector.GetAt(2);}
 };
 class Vec4F : public Vec3F{
     public:
     float w;
     Vec4F() : Vec3F(){w = 0;}
-    Vec4F(KFbxVector4 &vector) : Vec3F(vector){w = vector.GetAt(3);}
+    Vec4F(FbxVector4 &vector) : Vec3F(vector){w = vector.GetAt(3);}
 };
 
 

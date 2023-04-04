@@ -2,23 +2,23 @@
 #include "MSHWriter.h"
 #include "MSHReader.h"
 
-KFbxWriter* CreateMSHWriter(KFbxSdkManager& pManager, KFbxExporter& pExporter, int pSubID, int pPluginID);
-void* GetMSHWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId);
-void FillMSHWriterIOSettings(KFbxIOSettings& pIOS);
+FbxWriter* CreateMSHWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID);
+void* GetMSHWriterInfo(FbxWriter::EInfoRequest pRequest, int pId);
+void FillMSHWriterIOSettings(FbxIOSettings& pIOS);
 
-KFbxReader* CreateMSHReader(KFbxSdkManager& pManager, KFbxImporter& pImporter, int pSubID, int pPluginID);
-void *GetMSHReaderInfo(KFbxReader::KInfoRequest pRequest, int pId);
-void FillMSHReaderIOSettings(KFbxIOSettings& pIOS);
+FbxReader* CreateMSHReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID);
+void *GetMSHReaderInfo(FbxReader::EInfoRequest pRequest, int pId);
+void FillMSHReaderIOSettings(FbxIOSettings& pIOS);
 
 // Create your own writer.
 // And your writer will get a pPluginID and pSubID.
-KFbxWriter* CreateMSHWriter(KFbxSdkManager& pManager, KFbxExporter& pExporter, int pSubID, int pPluginID)
+FbxWriter* CreateMSHWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
 {
     return FbxSdkNew<MSHWriter>(pManager, pPluginID);
 }
 
 // Get extension, description or version info about MSHWriter
-void* GetMSHWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId)
+void* GetMSHWriterInfo(FbxWriter::EInfoRequest pRequest, int pId)
 {
     static char const* sExt[] =
     {
@@ -34,45 +34,45 @@ void* GetMSHWriterInfo(KFbxWriter::KInfoRequest pRequest, int pId)
 
     switch (pRequest)
     {
-    case KFbxWriter::eInfoExtension:
+    case FbxWriter::eInfoExtension:
         return sExt;
-    case KFbxWriter::eInfoDescriptions:
+    case FbxWriter::eInfoDescriptions:
         return sDesc;
-    case KFbxWriter::eInfoVersions:
+    case FbxWriter::eInfoVersions:
         return 0;
     default:
         return 0;
     }
 }
 
-void FillMSHWriterIOSettings(KFbxIOSettings& pIOS)
+void FillMSHWriterIOSettings(FbxIOSettings& pIOS)
 {
-    // Here you can write your own KFbxIOSettings and parse them.
+    // Here you can write your own FbxIOSettings and parse them.
 }
 
 
 // Creates a MSHReader in the Sdk Manager
-KFbxReader* CreateMSHReader(KFbxSdkManager& pManager, KFbxImporter& pImporter, int pSubID, int pPluginID)
+FbxReader* CreateMSHReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
 {
     return FbxSdkNew<MSHReader>(pManager, pPluginID);
 }
 
 // Get extension, description or version info about MSHReader
-void *GetMSHReaderInfo(KFbxReader::KInfoRequest pRequest, int pId)
+void *GetMSHReaderInfo(FbxReader::EInfoRequest pRequest, int pId)
 {
     switch (pRequest)
     {
-    case KFbxReader::eInfoExtension:
-        return GetMSHWriterInfo(KFbxWriter::eInfoExtension, pId);
-    case KFbxReader::eInfoDescriptions:
-        return GetMSHWriterInfo(KFbxWriter::eInfoDescriptions, pId);
+    case FbxReader::eInfoExtension:
+        return GetMSHWriterInfo(FbxWriter::eInfoExtension, pId);
+    case FbxReader::eInfoDescriptions:
+        return GetMSHWriterInfo(FbxWriter::eInfoDescriptions, pId);
     default:
         return 0;
     }
 }
 
-void FillMSHReaderIOSettings(KFbxIOSettings& pIOS)
+void FillMSHReaderIOSettings(FbxIOSettings& pIOS)
 {
-    // Here you can write your own KFbxIOSettings and parse them.
+    // Here you can write your own FbxIOSettings and parse them.
 }
 
