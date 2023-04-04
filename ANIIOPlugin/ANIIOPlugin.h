@@ -14,7 +14,8 @@ void FillANIReaderIOSettings(FbxIOSettings& pIOS);
 // And your writer will get a pPluginID and pSubID.
 FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
 {
-    return FbxSdkNew<ANIWriter>(pManager, pPluginID);
+    FbxStatus status;
+    return new ANIWriter(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about ANIWriter
@@ -53,7 +54,8 @@ void FillANIWriterIOSettings(FbxIOSettings& pIOS)
 // Creates a ANIReader in the Sdk Manager
 FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
 {
-    return FbxSdkNew<ANIReader>(pManager, pPluginID);
+    FbxStatus status;
+    return new ANIReader(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about ANIReader

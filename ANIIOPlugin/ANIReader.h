@@ -2,10 +2,11 @@
 ANI读取插件for FBX SDK
 */
 #include "translate.h"
+
 class ANIReader : public FbxReader
 {
 public:
-    ANIReader(FbxManager &pFbxSdkManager, int pID);
+    ANIReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus);
     virtual ~ANIReader();
     virtual void GetVersion(int& pMajor, int& pMinor, int& pRevision) const;
     virtual bool FileOpen(char* pFileName);
@@ -23,11 +24,12 @@ private:
 };
 
 /*--------------------ANI插件类定义--------------------*/
-ANIReader::ANIReader(FbxManager &pFbxSdkManager, int pID):
-FbxReader(pFbxSdkManager, pID),
+ANIReader::ANIReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus) :
+FbxReader(pFbxSdkManager, pID, pStatus),
 mFilePointer(NULL),
 mManager(&pFbxSdkManager)
 {
+
 }
 
 ANIReader::~ANIReader()
@@ -74,8 +76,9 @@ bool ANIReader::GetReadOptions(bool pParseFileAsNeeded)
 /*--------------------读取ANI信息--------------------*/
 bool ANIReader::Read(FbxDocument* pDocument)
 {
-    if (!pDocument){
-        GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
+    FbxStatus status;
+    if (!pDocument) {
+        status.SetCode(FbxStatus::eFailure, "Invalid document handle");
         return false;
     }
     //创建根场景
@@ -146,7 +149,7 @@ bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
     BoneInfo* pBoneInfo;
     FbxNode *pParentNode, *pChildNode;
     int *transformationCount, *rotationCount, *scalingCount;
-    FbxMatrix parentMatrix, childMatrix;
+    FbxAMatrix parentMatrix, childMatrix;
     //为每个骨骼结点添加父子信息
     for(int i = 0; i < pHeader->boneCount; i++){
         pBoneInfo = (BoneInfo*)pReader;
@@ -155,10 +158,10 @@ bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
         //插入骨骼节点关系信息
         if(pChildNode){ //判断ANI文件正确性
             if(pParentNode == NULL){
-                pChildNode->GetSkeleton()->SetSkeletonType(FbxSkeleton::eROOT);    //根节点时设为root骨骼节点
-                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
+                pChildNode->GetSkeleton()->SetSkeletonType(FbxSkeleton::eRoot);    //根节点时设为root骨骼节点
+                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSourcePivot),
+                                   pChildNode->GetGeometricRotation(FbxNode::eSourcePivot),
+                                   pChildNode->GetGeometricScaling(FbxNode::eSourcePivot));
                 pChildNode->LclTranslation.Set(childMatrix.GetT());
                 pChildNode->LclRotation.Set(childMatrix.GetR());
                 pChildNode->LclScaling.Set(childMatrix.GetS());
@@ -167,12 +170,12 @@ bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
                 pRootNode->RemoveChild(pChildNode);    //添加节点前先从根场景删除骨骼节点
                 pParentNode->AddChild(pChildNode);
                 //世界坐标到本地坐标的变换
-                parentMatrix.SetTRS(pParentNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
-                                    pParentNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
-                                    pParentNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
-                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricRotation(FbxNode::eSOURCE_SET),
-                                   pChildNode->GetGeometricScaling(FbxNode::eSOURCE_SET));
+                parentMatrix.SetTRS(pParentNode->GetGeometricTranslation(FbxNode::eSourcePivot),
+                                    pParentNode->GetGeometricRotation(FbxNode::eSourcePivot),
+                                    pParentNode->GetGeometricScaling(FbxNode::eSourcePivot));
+                childMatrix.SetTRS(pChildNode->GetGeometricTranslation(FbxNode::eSourcePivot),
+                                   pChildNode->GetGeometricRotation(FbxNode::eSourcePivot),
+                                   pChildNode->GetGeometricScaling(FbxNode::eSourcePivot));
                 childMatrix = parentMatrix.Inverse() * childMatrix;
                 pChildNode->LclTranslation.Set(childMatrix.GetT());
                 pChildNode->LclRotation.Set(childMatrix.GetR());

@@ -4,7 +4,7 @@ class ANIWriter : public FbxWriter
 {
 public:
 
-    ANIWriter(FbxManager &pFbxManager, int pID);
+    ANIWriter(FbxManager& pFbxManager, int pID, FbxStatus& pStatus);
 
     //VERY important to put the file close in the destructor
     virtual ~ANIWriter();
@@ -22,8 +22,8 @@ private:
     FbxManager *mManager;
 };
 
-ANIWriter::ANIWriter(FbxManager &pFbxManager, int pID):
-FbxWriter(pFbxManager, pID),
+ANIWriter::ANIWriter(FbxManager& pFbxManager, int pID, FbxStatus& pStatus):
+FbxWriter(pFbxManager, pID, pStatus),
 mFilePointer(NULL),
 mManager(&pFbxManager)
 {
@@ -77,9 +77,9 @@ void ANIWriter::GetWriteOptions()
 // Write file with stream options
 bool ANIWriter::Write(FbxDocument* pDocument)
 {
-    if (!pDocument)
-    {
-        GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
+    FbxStatus status;
+    if (!pDocument) {
+        status.SetCode(FbxStatus::eFailure, "Invalid document handle");
         return false;
     }
 

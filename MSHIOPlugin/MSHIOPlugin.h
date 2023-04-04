@@ -14,7 +14,8 @@ void FillMSHReaderIOSettings(FbxIOSettings& pIOS);
 // And your writer will get a pPluginID and pSubID.
 FbxWriter* CreateMSHWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
 {
-    return FbxSdkNew<MSHWriter>(pManager, pPluginID);
+    FbxStatus status;
+    return new MSHWriter(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about MSHWriter
@@ -54,7 +55,8 @@ void FillMSHWriterIOSettings(FbxIOSettings& pIOS)
 // Creates a MSHReader in the Sdk Manager
 FbxReader* CreateMSHReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
 {
-    return FbxSdkNew<MSHReader>(pManager, pPluginID);
+    FbxStatus status;
+    return new MSHReader(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about MSHReader

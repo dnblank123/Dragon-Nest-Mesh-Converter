@@ -7,7 +7,7 @@ class MSHWriter : public FbxWriter
 {
 public:
 
-    MSHWriter(FbxManager &pFbxSdkManager, int pID);
+    MSHWriter(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus);
     virtual ~MSHWriter();
     virtual bool FileCreate(char* pFileName);
     virtual bool FileClose();
@@ -26,8 +26,8 @@ private:
     FbxManager *mManager;
 };
 
-MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID):
-    FbxWriter(pFbxSdkManager, pID),
+MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
+    FbxWriter(pFbxSdkManager, pID, pStatus),
     mFilePointer(NULL),
     mManager(&pFbxSdkManager)
 {
@@ -81,8 +81,9 @@ void MSHWriter::GetWriteOptions()
 // Write file with stream options
 bool MSHWriter::Write(FbxDocument* pDocument)
 {
-    if (!pDocument){
-        GetError().SetLastErrorID(eINVALID_DOCUMENT_HANDLE);
+    FbxStatus status;
+    if (!pDocument) {
+        status.SetCode(FbxStatus::eFailure, "Invalid document handle");
         return false;
     }
 
