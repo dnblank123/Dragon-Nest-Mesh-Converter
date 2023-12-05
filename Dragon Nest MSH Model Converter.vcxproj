@@ -108,6 +108,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -116,14 +118,14 @@
     <ClCompile Include="msh2fbx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="aniioplugin\ANIIOPlugin.h" />
-    <ClInclude Include="aniioplugin\ANIReader.h" />
-    <ClInclude Include="aniioplugin\ANIWriter.h" />
-    <ClInclude Include="aniioplugin\custom.h" />
-    <ClInclude Include="mshioplugin\custom.h" />
-    <ClInclude Include="mshioplugin\MSHIOPlugin.h" />
-    <ClInclude Include="mshioplugin\MSHReader.h" />
-    <ClInclude Include="mshioplugin\MSHWriter.h" />
+    <ClInclude Include="ANIIOPlugin\ANIIOPlugin.h" />
+    <ClInclude Include="ANIIOPlugin\ANIReader.h" />
+    <ClInclude Include="ANIIOPlugin\ANIWriter.h" />
+    <ClInclude Include="ANIIOPlugin\custom.h" />
+    <ClInclude Include="MSHIOPlugin\custom.h" />
+    <ClInclude Include="MSHIOPlugin\MSHIOPlugin.h" />
+    <ClInclude Include="MSHIOPlugin\MSHReader.h" />
+    <ClInclude Include="MSHIOPlugin\MSHWriter.h" />
     <ClInclude Include="resource\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="translate.h" />

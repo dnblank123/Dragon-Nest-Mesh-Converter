@@ -50,14 +50,14 @@
 #define OTHER_DATA_EDITBOX 1009
 
 //自定义函数声明
-const wchar_t* GetIOFilters(FbxManager*, int);
-void GetFileName(HWND, FbxManager*, wchar_t*,int &, int);
-bool ConvertFile(FbxManager* , wchar_t*, int, wchar_t*, int, wchar_t*, int);
-FbxManager* InitialFbxSdk();
+inline const wchar_t* GetIOFilters(FbxManager*, int);
+inline void GetFileName(HWND, FbxManager*, wchar_t*,int &, int);
+inline bool ConvertFile(FbxManager* , wchar_t*, int, wchar_t*, int, wchar_t*, int);
+inline FbxManager* InitialFbxSdk();
 
 
 //获取文件格式filter
-const wchar_t* GetIOFilters(FbxManager* pSdkManager, int ioSettings)
+inline const wchar_t* GetIOFilters(FbxManager* pSdkManager, int ioSettings)
 {
     FbxString s;
     int filterCount = 0;
@@ -101,7 +101,7 @@ const wchar_t* GetIOFilters(FbxManager* pSdkManager, int ioSettings)
 //0 - inputFile
 //1 - aniFile
 //2 - outputFile
-void GetFileName(HWND hwnd,
+inline void GetFileName(HWND hwnd,
                  FbxManager* pSdkManager,
                  wchar_t* szFile,
                  int &formatNum,
@@ -147,7 +147,7 @@ void GetFileName(HWND hwnd,
     delete filter;
 }
 
-bool ConvertFile(FbxManager* pSdkManager,
+inline bool ConvertFile(FbxManager* pSdkManager,
                  wchar_t* inputFile, int inputFormat,
                  wchar_t* aniFile, int aniFormat,
                  wchar_t* outputFile, int outputFormat)
@@ -197,7 +197,7 @@ bool ConvertFile(FbxManager* pSdkManager,
     return lResult;
 }
 
-FbxManager* InitialFbxSdk()
+inline FbxManager* InitialFbxSdk()
 {
     //创建FBXSDK管理器
     int lRegisteredCount;

@@ -1,6 +1,7 @@
 ﻿/*
 ANI读取插件for FBX SDK
 */
+#pragma once
 #include "translate.h"
 
 class ANIReader : public FbxReader
@@ -24,7 +25,7 @@ private:
 };
 
 /*--------------------ANI插件类定义--------------------*/
-ANIReader::ANIReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus) :
+inline ANIReader::ANIReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus) :
 FbxReader(pFbxSdkManager, pID, pStatus),
 mFilePointer(NULL),
 mManager(&pFbxSdkManager)
@@ -32,19 +33,19 @@ mManager(&pFbxSdkManager)
 
 }
 
-ANIReader::~ANIReader()
+inline ANIReader::~ANIReader()
 {
     FileClose();
 }
 
-void ANIReader::GetVersion(int& pMajor, int& pMinor, int& pRevision) const
+inline void ANIReader::GetVersion(int& pMajor, int& pMinor, int& pRevision) const
 {
     pMajor = 1;
     pMinor = 0;
     pRevision = 0;
 }
 
-bool ANIReader::FileOpen(char* pFileName)
+inline bool ANIReader::FileOpen(char* pFileName)
 {
     if(mFilePointer != NULL)
         FileClose();
@@ -54,27 +55,27 @@ bool ANIReader::FileOpen(char* pFileName)
     return true;
 }
 
-bool ANIReader::FileClose()
+inline bool ANIReader::FileClose()
 {
     if(mFilePointer!=NULL)
         fclose(mFilePointer);
     return true;
 
 }
-bool ANIReader::IsFileOpen()
+inline bool ANIReader::IsFileOpen()
 {
     if(mFilePointer != NULL)
         return true;
     return false;
 }
 
-bool ANIReader::GetReadOptions(bool pParseFileAsNeeded)
+inline bool ANIReader::GetReadOptions(bool pParseFileAsNeeded)
 {
     return true;
 }
 
 /*--------------------读取ANI信息--------------------*/
-bool ANIReader::Read(FbxDocument* pDocument)
+inline bool ANIReader::Read(FbxDocument* pDocument)
 {
     FbxStatus status;
     if (!pDocument) {
@@ -123,7 +124,7 @@ bool ANIReader::Read(FbxDocument* pDocument)
 
 /*--------------------自定义函数定义--------------------*/
 
-bool ANIReader::InitialPointers(char* pReader,
+inline bool ANIReader::InitialPointers(char* pReader,
                      char* &pAnimateName,
                      char* &pAnimateData,
                      AniHeader* &pHeader)
@@ -142,7 +143,7 @@ bool ANIReader::InitialPointers(char* pReader,
     return true;
 }
 
-bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
+inline bool ANIReader::AddBoneInfo(FbxNode* pRootNode,
                  char* pReader,    //动画数据开始处
                  AniHeader* pHeader)
 {

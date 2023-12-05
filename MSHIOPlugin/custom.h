@@ -1,4 +1,6 @@
 ﻿/*--------------------MSH自定义类型定义--------------------*/
+#pragma once
+
 class Vec2F {
     public:
     float x;

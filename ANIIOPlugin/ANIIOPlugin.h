@@ -2,24 +2,24 @@
 #include "ANIReader.h"
 #include "ANIWriter.h"
 
-FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID);
+inline FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID);
 void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId);
 void FillANIWriterIOSettings(FbxIOSettings& pIOS);
 
-FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID);
+inline FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID);
 void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId);
 void FillANIReaderIOSettings(FbxIOSettings& pIOS);
 
 // Create your own writer.
 // And your writer will get a pPluginID and pSubID.
-FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
+inline FbxWriter* CreateANIWriter(FbxManager& pManager, FbxExporter& pExporter, int pSubID, int pPluginID)
 {
     FbxStatus status;
     return new ANIWriter(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about ANIWriter
-void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId)
+inline void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId)
 {
     static char const* sExt[] =
     {
@@ -46,20 +46,20 @@ void* GetANIWriterInfo(FbxWriter::EInfoRequest pRequest, int pId)
     }
 }
 
-void FillANIWriterIOSettings(FbxIOSettings& pIOS)
+inline void FillANIWriterIOSettings(FbxIOSettings& pIOS)
 {
     // Here you can write your own FbxIOSettings and parse them.
 }
 
 // Creates a ANIReader in the Sdk Manager
-FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
+inline FbxReader* CreateANIReader(FbxManager& pManager, FbxImporter& pImporter, int pSubID, int pPluginID)
 {
     FbxStatus status;
     return new ANIReader(pManager, pPluginID, status);
 }
 
 // Get extension, description or version info about ANIReader
-void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId)
+inline void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId)
 {
     switch (pRequest)
     {
@@ -72,7 +72,7 @@ void *GetANIReaderInfo(FbxReader::EInfoRequest pRequest, int pId)
     }
 }
 
-void FillANIReaderIOSettings(FbxIOSettings& pIOS)
+inline void FillANIReaderIOSettings(FbxIOSettings& pIOS)
 {
     // Here you can write your own FbxIOSettings and parse them.
 }

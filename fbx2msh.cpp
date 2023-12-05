@@ -3,41 +3,45 @@
 #include <stdio.h>
 #include <fbxmanager.h>
 
-void ShowHelp()
+namespace f2m
 {
-    printf("FBX to MSH Converter\t\tby GPBeta\n\n");
-    printf("usage: fbx2msh.exe input.fbx output.msh\n");
-}
-
-int main(int argc, char* argv[])
-{
-    if(argc != 3){
-        ShowHelp();
-        return 0;
+    inline void ShowHelp()
+    {
+        printf("FBX to MSH Converter\t\tby GPBeta\n\n");
+        printf("usage: fbx2msh.exe input.fbx output.msh\n");
     }
 
-    //initial fbx
-    FbxManager* lSdkManager;
-    lSdkManager = InitialFbxSdk();
+    int main(int argc, char* argv[])
+    {
+        if (argc != 3) {
+            ShowHelp();
+            return 0;
+        }
 
-    //paths
-    wchar_t* fbxPath = new wchar_t[MAX_PATH];
-    wchar_t* mshPath = new wchar_t[MAX_PATH];
-    size_t pathSize;
+        //initial fbx
+        FbxManager* lSdkManager;
+        lSdkManager = InitialFbxSdk();
 
-    pathSize = MultiByteToWideChar(CP_ACP, 0, argv[1], -1, NULL, NULL);
-    MultiByteToWideChar(CP_ACP, 0, argv[1], -1, fbxPath, pathSize);
+        //paths
+        wchar_t* fbxPath = new wchar_t[MAX_PATH];
+        wchar_t* mshPath = new wchar_t[MAX_PATH];
+        size_t pathSize;
 
-    pathSize = MultiByteToWideChar(CP_ACP, 0, argv[2], -1, NULL, NULL);
-    MultiByteToWideChar(CP_ACP, 0, argv[2], -1, mshPath, pathSize);
+        pathSize = MultiByteToWideChar(CP_ACP, 0, argv[1], -1, NULL, NULL);
+        MultiByteToWideChar(CP_ACP, 0, argv[1], -1, fbxPath, pathSize);
 
-    if(ConvertFile(lSdkManager, fbxPath, 0, NULL, -1, mshPath, 10))
-        printf("Convert Succeed\n");
-    else
-        printf("Convert Failed.Type 'h' for the usage.\n");
+        pathSize = MultiByteToWideChar(CP_ACP, 0, argv[2], -1, NULL, NULL);
+        MultiByteToWideChar(CP_ACP, 0, argv[2], -1, mshPath, pathSize);
 
-    delete fbxPath;
-    delete mshPath;
+        if (ConvertFile(lSdkManager, fbxPath, 0, NULL, -1, mshPath, 10))
+            printf("Convert Succeed\n");
+        else
+            printf("Convert Failed.Type 'h' for the usage.\n");
 
-    return 0;
+        delete fbxPath;
+        delete mshPath;
+
+        return 0;
+    }
 }
+

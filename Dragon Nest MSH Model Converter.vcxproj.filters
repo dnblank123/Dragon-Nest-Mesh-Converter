@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="MSH">
+      <UniqueIdentifier>{b98f6a4c-b812-428d-aa3b-830f86da77e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ANI">
+      <UniqueIdentifier>{26f90367-4b31-4f41-88c1-5e1b340565ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fbx2msh.cpp">
@@ -32,32 +38,32 @@
     <ClInclude Include="translate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="aniioplugin\ANIIOPlugin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="aniioplugin\ANIReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="aniioplugin\ANIWriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="aniioplugin\custom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mshioplugin\custom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mshioplugin\MSHIOPlugin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mshioplugin\MSHReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mshioplugin\MSHWriter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource\resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MSHIOPlugin\custom.h">
+      <Filter>MSH</Filter>
+    </ClInclude>
+    <ClInclude Include="MSHIOPlugin\MSHIOPlugin.h">
+      <Filter>MSH</Filter>
+    </ClInclude>
+    <ClInclude Include="MSHIOPlugin\MSHReader.h">
+      <Filter>MSH</Filter>
+    </ClInclude>
+    <ClInclude Include="MSHIOPlugin\MSHWriter.h">
+      <Filter>MSH</Filter>
+    </ClInclude>
+    <ClInclude Include="ANIIOPlugin\ANIIOPlugin.h">
+      <Filter>ANI</Filter>
+    </ClInclude>
+    <ClInclude Include="ANIIOPlugin\ANIReader.h">
+      <Filter>ANI</Filter>
+    </ClInclude>
+    <ClInclude Include="ANIIOPlugin\ANIWriter.h">
+      <Filter>ANI</Filter>
+    </ClInclude>
+    <ClInclude Include="ANIIOPlugin\custom.h">
+      <Filter>ANI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

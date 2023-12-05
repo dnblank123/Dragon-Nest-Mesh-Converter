@@ -1,47 +1,50 @@
 
 #include "stdafx.h"
 #include <stdio.h>
-
-void ShowHelp()
+namespace m2f 
 {
-    printf("MSH to FBX Converter\t\tby GPBeta\n\n");
-    printf("usage: msh2fbx.exe input.msh input.ani output.fbx\n");
-}
-
-int main(int argc, char* argv[])
-{
-    if(argc != 4){
-        ShowHelp();
-        return 0;
+    inline void ShowHelp()
+    {
+        printf("MSH to FBX Converter\t\tby GPBeta\n\n");
+        printf("usage: msh2fbx.exe input.msh input.ani output.fbx\n");
     }
 
-    //initial fbx
-    FbxManager* lSdkManager;
-    lSdkManager = InitialFbxSdk();
+    int main(int argc, char* argv[])
+    {
+        if (argc != 4) {
+            ShowHelp();
+            return 0;
+        }
 
-    //paths
-    wchar_t* mshPath = new wchar_t[MAX_PATH];
-    wchar_t* aniPath = new wchar_t[MAX_PATH];
-    wchar_t* fbxPath = new wchar_t[MAX_PATH];
-    size_t pathSize;
+        //initial fbx
+        FbxManager* lSdkManager;
+        lSdkManager = InitialFbxSdk();
 
-    pathSize = MultiByteToWideChar(CP_ACP, 0, argv[1], -1, NULL, NULL);
-    MultiByteToWideChar(CP_ACP, 0, argv[1], -1, mshPath, pathSize);
+        //paths
+        wchar_t* mshPath = new wchar_t[MAX_PATH];
+        wchar_t* aniPath = new wchar_t[MAX_PATH];
+        wchar_t* fbxPath = new wchar_t[MAX_PATH];
+        size_t pathSize;
 
-    pathSize = MultiByteToWideChar(CP_ACP, 0, argv[2], -1, NULL, NULL);
-    MultiByteToWideChar(CP_ACP, 0, argv[2], -1, aniPath, pathSize);
+        pathSize = MultiByteToWideChar(CP_ACP, 0, argv[1], -1, NULL, NULL);
+        MultiByteToWideChar(CP_ACP, 0, argv[1], -1, mshPath, pathSize);
 
-    pathSize = MultiByteToWideChar(CP_ACP, 0, argv[3], -1, NULL, NULL);
-    MultiByteToWideChar(CP_ACP, 0, argv[3], -1, fbxPath, pathSize);
+        pathSize = MultiByteToWideChar(CP_ACP, 0, argv[2], -1, NULL, NULL);
+        MultiByteToWideChar(CP_ACP, 0, argv[2], -1, aniPath, pathSize);
 
-    if(ConvertFile(lSdkManager, mshPath, 5, aniPath, -1, fbxPath, 1))
-        printf("Convert Succeed\n");
-    else
-        printf("Convert Failed.Type 'h' for the usage.\n");
+        pathSize = MultiByteToWideChar(CP_ACP, 0, argv[3], -1, NULL, NULL);
+        MultiByteToWideChar(CP_ACP, 0, argv[3], -1, fbxPath, pathSize);
 
-    delete fbxPath;
-    delete mshPath;
-    delete aniPath;
+        if (ConvertFile(lSdkManager, mshPath, 5, aniPath, -1, fbxPath, 1))
+            printf("Convert Succeed\n");
+        else
+            printf("Convert Failed.Type 'h' for the usage.\n");
 
-    return 0;
+        delete fbxPath;
+        delete mshPath;
+        delete aniPath;
+
+        return 0;
+    }
 }
+

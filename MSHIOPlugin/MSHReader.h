@@ -1,6 +1,7 @@
 ﻿/*
 MSH读取插件for FBX SDK
 */
+#pragma once
 
 class MSHReader : public FbxReader
 {
@@ -15,39 +16,39 @@ public:
     virtual bool Read(FbxDocument* pDocument);
 
     //自定义函数声明
-    virtual char* MSHReader::InitialPointer(char*, char*&, MshHeader*&);
-    virtual char* MSHReader::InitialMeshPointer(char*, MeshInfo*&, MeshDataPointer*);
-    virtual FbxNode* MSHReader::CreateMesh(FbxScene*, MeshInfo*, MeshDataPointer*);
-    virtual void MSHReader::CreateSkeleton(FbxScene*, MshHeader*, BoneData*);
-    virtual FbxCluster** MSHReader::LinkSkeleton(FbxNode*, FbxNode*, MeshDataPointer*);
-    virtual void MSHReader::AddWeight(FbxCluster**, MeshInfo*, MeshDataPointer*);
-    virtual void MSHReader::StoreBindPose(FbxScene*, FbxNode*, FbxCluster**, MeshDataPointer*);
+    virtual char* InitialPointer(char*, char*&, MshHeader*&);
+    virtual char* InitialMeshPointer(char*, MeshInfo*&, MeshDataPointer*);
+    virtual FbxNode* CreateMesh(FbxScene*, MeshInfo*, MeshDataPointer*);
+    virtual void CreateSkeleton(FbxScene*, MshHeader*, BoneData*);
+    virtual FbxCluster** LinkSkeleton(FbxNode*, FbxNode*, MeshDataPointer*);
+    virtual void AddWeight(FbxCluster**, MeshInfo*, MeshDataPointer*);
+    virtual void StoreBindPose(FbxScene*, FbxNode*, FbxCluster**, MeshDataPointer*);
 private:
     FILE *mFilePointer;
     FbxManager *mManager;
 };
 
 /*--------------------MSH插件类定义--------------------*/
-MSHReader::MSHReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
+inline MSHReader::MSHReader(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
 FbxReader(pFbxSdkManager, pID, pStatus),
 mFilePointer(NULL),
 mManager(&pFbxSdkManager)
 {
 }
 
-MSHReader::~MSHReader()
+inline MSHReader::~MSHReader()
 {
     FileClose();
 }
 
-void MSHReader::GetVersion(int& pMajor, int& pMinor, int& pRevision) const
+inline void MSHReader::GetVersion(int& pMajor, int& pMinor, int& pRevision) const
 {
     pMajor = 1;
     pMinor = 0;
     pRevision = 0;
 }
 
-bool MSHReader::FileOpen(char* pFileName)
+inline bool MSHReader::FileOpen(char* pFileName)
 {
     if(mFilePointer != NULL)
         FileClose();
@@ -57,27 +58,27 @@ bool MSHReader::FileOpen(char* pFileName)
     return true;
 }
 
-bool MSHReader::FileClose()
+inline bool MSHReader::FileClose()
 {
     if(mFilePointer!=NULL)
         fclose(mFilePointer);
     return true;
 
 }
-bool MSHReader::IsFileOpen()
+inline bool MSHReader::IsFileOpen()
 {
     if(mFilePointer != NULL)
         return true;
     return false;
 }
 
-bool MSHReader::GetReadOptions(bool pParseFileAsNeeded)
+inline bool MSHReader::GetReadOptions(bool pParseFileAsNeeded)
 {
     return true;
 }
 
 /*--------------------读取MSH信息--------------------*/
-bool MSHReader::Read(FbxDocument* pDocument)
+inline bool MSHReader::Read(FbxDocument* pDocument)
 {
     FbxStatus status;
     if (!pDocument) {
@@ -149,7 +150,7 @@ bool MSHReader::Read(FbxDocument* pDocument)
 }
 
 /*--------------------自定义函数定义--------------------*/
-char* MSHReader::InitialPointer(char* pReader,
+inline char* MSHReader::InitialPointer(char* pReader,
                                 char* &pBone,
                                 MshHeader* &pHeader)
 {
@@ -165,7 +166,7 @@ char* MSHReader::InitialPointer(char* pReader,
     return pReader;
 }
 
-char* MSHReader::InitialMeshPointer(char* pReader,
+inline char* MSHReader::InitialMeshPointer(char* pReader,
                                     MeshInfo* &pMeshInfo,
                                     MeshDataPointer* pMeshData)
 {
@@ -194,7 +195,7 @@ char* MSHReader::InitialMeshPointer(char* pReader,
     return pReader;
 }
 
-FbxNode* MSHReader::CreateMesh(FbxScene* pScene,
+inline FbxNode* MSHReader::CreateMesh(FbxScene* pScene,
                                 MeshInfo* pMeshInfo,
                                 MeshDataPointer* pMeshData)
 {
@@ -295,7 +296,7 @@ FbxNode* MSHReader::CreateMesh(FbxScene* pScene,
 }
 
 //创建骨骼
-void MSHReader::CreateSkeleton(FbxScene* pScene,
+inline void MSHReader::CreateSkeleton(FbxScene* pScene,
                                MshHeader* pHeader,
                                BoneData* pBoneData)
 {
@@ -336,7 +337,7 @@ void MSHReader::CreateSkeleton(FbxScene* pScene,
 }
 
 //连接相应骨骼到Mesh,返回值是一个存放约束器指针的数组
-FbxCluster** MSHReader::LinkSkeleton(FbxNode* pScene,
+inline FbxCluster** MSHReader::LinkSkeleton(FbxNode* pScene,
                                       FbxNode* pMesh,
                                       MeshDataPointer* pMeshData)
 {
@@ -370,7 +371,7 @@ FbxCluster** MSHReader::LinkSkeleton(FbxNode* pScene,
 }
 
 //添加权重
-void MSHReader::AddWeight(FbxCluster** pClusterIndex,
+inline void MSHReader::AddWeight(FbxCluster** pClusterIndex,
                           MeshInfo* pMeshInfo,
                           MeshDataPointer* pMeshData)
 {
@@ -385,7 +386,7 @@ void MSHReader::AddWeight(FbxCluster** pClusterIndex,
 }
 
 //保存当前Pose
-void MSHReader::StoreBindPose(FbxScene* pScene,
+inline void MSHReader::StoreBindPose(FbxScene* pScene,
                               FbxNode* pMesh,
                               FbxCluster** pClusterIndex,
                               MeshDataPointer* pMeshData)

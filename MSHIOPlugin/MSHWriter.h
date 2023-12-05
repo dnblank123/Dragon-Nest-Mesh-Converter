@@ -2,6 +2,7 @@
 MSH写入插件for FBX SDK
 */
 #include "translate.h"
+#pragma once
 
 class MSHWriter : public FbxWriter
 {
@@ -26,7 +27,7 @@ private:
     FbxManager *mManager;
 };
 
-MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
+inline MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
     FbxWriter(pFbxSdkManager, pID, pStatus),
     mFilePointer(NULL),
     mManager(&pFbxSdkManager)
@@ -35,13 +36,13 @@ MSHWriter::MSHWriter(FbxManager& pFbxSdkManager, int pID, FbxStatus& pStatus):
 }
 
 
-MSHWriter::~MSHWriter()
+inline MSHWriter::~MSHWriter()
 {
     FileClose();
 }
 
 // Create a file stream with pFileName
-bool MSHWriter::FileCreate(char* pFileName)
+inline bool MSHWriter::FileCreate(char* pFileName)
 {
     if(mFilePointer != NULL)
         FileClose();
@@ -55,7 +56,7 @@ bool MSHWriter::FileCreate(char* pFileName)
 }
 
 // Close the file stream
-bool MSHWriter::FileClose()
+inline bool MSHWriter::FileClose()
 {
     if(mFilePointer != NULL)
     {
@@ -66,7 +67,7 @@ bool MSHWriter::FileClose()
 }
 
 // Check whether the file stream is open.
-bool MSHWriter::IsFileOpen()
+inline bool MSHWriter::IsFileOpen()
 {
     if(mFilePointer != NULL)
         return true;
@@ -74,12 +75,12 @@ bool MSHWriter::IsFileOpen()
 }
 
 // Get the file stream options
-void MSHWriter::GetWriteOptions()
+inline void MSHWriter::GetWriteOptions()
 {
 }
 
 // Write file with stream options
-bool MSHWriter::Write(FbxDocument* pDocument)
+inline bool MSHWriter::Write(FbxDocument* pDocument)
 {
     FbxStatus status;
     if (!pDocument) {
@@ -121,19 +122,19 @@ bool MSHWriter::Write(FbxDocument* pDocument)
 
 
 // Pre-process the scene before write it out
-bool MSHWriter::PreprocessScene(FbxScene &pScene)
+inline bool MSHWriter::PreprocessScene(FbxScene &pScene)
 {
     return true;
 }
 
 // Post-process the scene after write it out
-bool MSHWriter::PostprocessScene(FbxScene &pScene)
+inline bool MSHWriter::PostprocessScene(FbxScene &pScene)
 {
     return true;
 }
 
 
-void MSHWriter::WriteHeader(FbxScene* pScene)
+inline void MSHWriter::WriteHeader(FbxScene* pScene)
 {
     size_t lSize = 0x130;   //sizeof(MshHeader);
     MshHeader lHeader;
@@ -170,7 +171,7 @@ void MSHWriter::WriteHeader(FbxScene* pScene)
     fwrite(lBuffer, lSize, 1, mFilePointer);
 }
 //递归读取骨骼信息并写入信息
-void MSHWriter::WriteBoneData(FbxScene* pScene, FbxNode* pSkeletonNode)
+inline void MSHWriter::WriteBoneData(FbxScene* pScene, FbxNode* pSkeletonNode)
 {
     BoneData lBoneData;
     char* lBuffer = (char*)&lBoneData;
@@ -200,7 +201,7 @@ void MSHWriter::WriteBoneData(FbxScene* pScene, FbxNode* pSkeletonNode)
     }
 }
 
-bool MSHWriter::WriteMeshData(FbxNode* pMeshNode)
+inline bool MSHWriter::WriteMeshData(FbxNode* pMeshNode)
 {
     FbxMesh* pMesh = pMeshNode->GetMesh();
     if(pMesh){
