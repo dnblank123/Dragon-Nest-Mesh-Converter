@@ -1,0 +1,31 @@
+
+#include "resource.h"
+#include <windows.h>
+
+ICON_LOH ICON DISCARDABLE "dn.ico"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+Menu MENU DISCARDABLE
+{
+    POPUP "File(&F)"
+    {
+        MENUITEM "Exit(&E)",IDM_EXIT
+    }
+    POPUP "Help(&H)"
+    {
+        MENUITEM "About(&A)",IDM_ABOUT
+    }
+}
+
+LANGUAGE LANG_CHINESE, 0x2
+Menu MENU DISCARDABLE
+{
+    POPUP "文件(&F)"
+    {
+        MENUITEM "退出(&E)",IDM_EXIT
+    }
+    POPUP "帮助(&H)"
+    {
+        MENUITEM "关于(&A)",IDM_ABOUT
+    }
+}
